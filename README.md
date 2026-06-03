@@ -50,11 +50,28 @@ Anomalies were filtered to **standard-size homes only** (≤3 beds, ≤2 baths) 
 
 ## Results
 
-The model surfaces properties with anomalous price-to-feature ratios in the common home segment. Output includes:
+| Metric | Value |
+|---|---|
+| Total records processed | 526,514 |
+| Anomalies detected (0.5% contamination) | ~2,632 |
+| Anomalies in standard-size homes (≤3 beds, ≤2 baths) | **281** |
+| Effective anomaly rate in common homes | **0.05%** of full dataset |
 
-- `anomaly_score` — the lower the score, the more anomalous the record
-- `price_per_sqft` — key signal for overpricing relative to size
-- City and state context for geographic analysis
+The model identified 281 common homes with statistically anomalous price-to-feature ratios. The filter for standard-size properties makes the detection far more selective than the contamination parameter alone — surfacing only the most extreme cases in the segment most relevant to average buyers.
+
+### Top 5 most anomalous cases
+
+| Price | Beds | Baths | Size (sqft) | Price/sqft | City | Anomaly Score |
+|---|---|---|---|---|---|---|
+| $14,995,000 | 3 | 1 | 1,404 | $10,680 | White Sulphur Springs | -0.0778 |
+| $9,154,500 | 3 | 2 | 1,200 | $7,629 | Parmelee | -0.0770 |
+| $11,500,000 | 3 | 1 | 773 | $14,877 | Olney | -0.0745 |
+| $6,400,000 | 2 | 1 | 672 | $9,524 | Helmville | -0.0739 |
+| $16,800,000 | 3 | 2 | 1,976 | $8,502 | Venango | -0.0727 |
+
+**Interpretation:** The most extreme case is a 3-bedroom, 1-bathroom home in White Sulphur Springs priced at $14.9M — $10,680 per square foot. For context, Manhattan averages ~$1,500/sqft. These are not luxury homes by size; they are common homes with anomalous pricing behavior, which is exactly what ratio-based feature engineering is designed to expose.
+
+The `anomaly_score` is the output of `decision_function()` — the more negative the value, the further the record is from the normal distribution of the training data.
 
 ---
 
